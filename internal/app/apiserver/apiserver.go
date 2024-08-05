@@ -3,6 +3,7 @@ package apiserver
 import (
 	"database/sql"
 
+	"github.com/aafxr/chat-bot/internal/app/store/sqlstore"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -13,6 +14,7 @@ func Start(config *Config) error {
 	}
 
 	defer db.Close()
+	sqlstore.New(db)
 	return nil
 }
 
