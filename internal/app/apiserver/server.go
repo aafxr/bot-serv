@@ -52,8 +52,6 @@ func (s *server) configureRouter() {
 	s.router.Use(s.logRequest)
 	s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 	s.router.HandleFunc("/user", s.handleUser()).Methods("GET")
-	s.router.HandleFunc("/user", s.handleUser()).Methods("GET")
-
 }
 
 func (s *server) setRequestID(next http.Handler) http.Handler {
