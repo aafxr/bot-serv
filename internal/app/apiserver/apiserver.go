@@ -5,6 +5,7 @@ import (
 
 	"github.com/aafxr/chat-bot/internal/app/store/sqlstore"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/sessions"
 )
 
 func Start(config *Config) error {
@@ -15,6 +16,8 @@ func Start(config *Config) error {
 
 	defer db.Close()
 	sqlstore.New(db)
+	sessionStore := sessions.NewCookieStore(config.SessionKey)
+
 	return nil
 }
 
