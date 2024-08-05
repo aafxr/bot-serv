@@ -2,10 +2,12 @@ package apiserver
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"time"
 
-	"github.com/aafxr/chat-bot/internal/app/store"
+	"github.com/aafxr/bot-serv/internal/app/model"
+	"github.com/aafxr/bot-serv/internal/app/store"
 	"github.com/google/uuid"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -36,13 +38,21 @@ func newServer(store store.Store, sessionStore sessions.Store) *server {
 		sessionStore: sessionStore,
 	}
 
+	s.configureRouter()
+
 	return s
+}
+
+func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
 }
 
 func (s *server) configureRouter() {
 	s.router.Use(s.setRequestID)
 	s.router.Use(s.logRequest)
 	s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
+	s.router.HandleFunc("/user", s.handleUser()).Methods("GET")
+	s.router.HandleFunc("/user", s.handleUser()).Methods("GET")
 
 }
 
@@ -60,7 +70,7 @@ func (s *server) logRequest(next http.Handler) http.Handler {
 			"remote_addr": r.RemoteAddr,
 			"request_ID":  r.Context().Value(ctxKeyRequestID),
 		})
-		logger.Info("started %s %s", r.Method, r.RequestURI)
+		logger.Logf(logrus.InfoLevel, "started %s %s", r.Method, r.RequestURI)
 
 		start := time.Now()
 		rw := &responseWriter{w, http.StatusOK}
@@ -83,4 +93,25 @@ func (s *server) logRequest(next http.Handler) http.Handler {
 			time.Now().Sub(start),
 		)
 	})
+}
+
+func (s *server) handleUser() http.HandlerFunc {
+	u := model.User{
+		TG_FirstName: "ivan",
+		TG_LastName:  "ivanov",
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		s.respond(w, r, 200, u)
+	}
+}
+
+func (s *server) error(w http.ResponseWriter, r *http.Request, code int, err error) {
+	s.respond(w, r, code, map[string]string{"error": err.Error()})
+}
+
+func (s *server) respond(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
+	w.WriteHeader(code)
+	if data != nil {
+		json.NewEncoder(w).Encode(data)
+	}
 }

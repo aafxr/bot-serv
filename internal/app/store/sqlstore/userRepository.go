@@ -1,7 +1,7 @@
 package sqlstore
 
 import (
-	"github.com/aafxr/chat-bot/internal/app/model"
+	"github.com/aafxr/bot-serv/internal/app/model"
 )
 
 // UserRepository ...

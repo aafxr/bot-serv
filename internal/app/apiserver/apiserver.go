@@ -2,23 +2,25 @@ package apiserver
 
 import (
 	"database/sql"
+	"net/http"
 
-	"github.com/aafxr/chat-bot/internal/app/store/sqlstore"
+	"github.com/aafxr/bot-serv/internal/app/store/sqlstore"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
 )
 
 func Start(config *Config) error {
-	db, err := newDB(config.BindAddr)
+	db, err := newDB(config.DatabaseURL)
 	if err != nil {
 		return err
 	}
 
 	defer db.Close()
-	sqlstore.New(db)
-	sessionStore := sessions.NewCookieStore(config.SessionKey)
+	store := sqlstore.New(db)
+	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+	srv := newServer(store, sessionStore)
 
-	return nil
+	return http.ListenAndServe(config.BindAddr, srv)
 }
 
 func newDB(dbURL string) (*sql.DB, error) {

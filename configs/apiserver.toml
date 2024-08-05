@@ -1,0 +1,4 @@
+log_level = "debug"
+database_url = "tgbot:3cKniDnWLqW7VAd8@tcp(127.0.0.1:3306)/bot_db"
+session_key = "session"
+bind_addr = "localhost:4200"

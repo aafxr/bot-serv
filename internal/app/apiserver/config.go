@@ -2,10 +2,10 @@ package apiserver
 
 //Config ...
 type Config struct {
-	BindAddr    string
-	LogLevel    string `toml:"log_level"`
-	DatabaseURL string `toml:database_url"`
-	SessionKey  string `toml:"session_key"`
+	BindAddr    string `json:"bind_addr" toml:"bind_addr"`
+	LogLevel    string `json:"log_level" toml:"log_level"`
+	DatabaseURL string `json:"database_url" toml:"database_url"`
+	SessionKey  string `json:"session_key" toml:"session_key"`
 }
 
 //NewConfig ...

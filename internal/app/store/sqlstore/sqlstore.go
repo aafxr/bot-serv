@@ -3,7 +3,7 @@ package sqlstore
 import (
 	"database/sql"
 
-	"github.com/aafxr/chat-bot/internal/app/store"
+	"github.com/aafxr/bot-serv/internal/app/store"
 )
 
 type Store struct {

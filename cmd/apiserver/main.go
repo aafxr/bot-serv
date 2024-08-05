@@ -6,7 +6,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/aafxr/chat-bot/internal/app/apiserver"
+	"github.com/aafxr/bot-serv/internal/app/apiserver"
 )
 
 var (

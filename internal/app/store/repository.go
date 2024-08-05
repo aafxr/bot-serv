@@ -1,6 +1,6 @@
 package store
 
-import "github.com/aafxr/chat-bot/internal/app/model"
+import "github.com/aafxr/bot-serv/internal/app/model"
 
 // UserRepository ...
 type UserRepository interface {
